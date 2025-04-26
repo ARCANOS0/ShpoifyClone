@@ -1,0 +1,18 @@
+# Configuration files containing sensitive data
+# Provide an example file instead
+/admin/config/db.php
+
+# IDE / Editor specific files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+*.log
+
+# Dependency directories (if you use Composer later)
+/vendor/
+
+# User uploaded files (if stored within the project - ideally store outside)
+# /uploads/
