@@ -1,0 +1,24 @@
+        /* Optional overrides or additions if needed */
+        /* Use height from all.css if defined */
+        /* .product img { height: 200px; } */
+
+        /* Ensure cards take full height of column */
+        .card {
+            height: 100%;
+        }
+        /* Ensure card body aligns content */
+         .card-body {
+             display: flex;
+             flex-direction: column;
+             justify-content: space-between;
+         }
+         /* Style for the button */
+         .buy-btn {
+            /* Your button styles from all.css should apply */
+            width: 80%;
+            margin: 0 auto; /* Center button if width is less than 100% */
+         }
+         /* Star color */
+         .star {
+             color: #ffc107; /* Or #FFE234 from your CSS */
+         }

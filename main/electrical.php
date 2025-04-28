@@ -46,7 +46,7 @@ session_start();
         <a class="navbar-brand d-flex align-items-center" href="index.php"> <!-- Make logo/name a link -->
             <img style="height: 50px; margin-right: 10px;" src="../pic/logo (2).png" alt="Logo">
              <!-- Removed margin from h3 for better alignment -->
-            <h3 style="color: whitesmoke;" class="mb-0">Shopify</h3>
+            <h3 style="color: white;" class="mb-0">Shopify</h3>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
