@@ -21,57 +21,13 @@
 
   <!-- Your Custom CSS (Load AFTER Bootstrap) - Path relative to this file -->
   <link rel="stylesheet" href="../all.css">
+  <link rel="stylesheet" href="../snippets/shop.css">
 
-  <style>
-    /* Optional overrides */
-    /* Ensure consistent card height */
-    .card {
-      height: 100%;
-    }
-
-    /* Ensure card body aligns content */
-    .card-body {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    /* Star color */
-    .star {
-      color: #ffc107;
-    }
-
-    /* Or #FFE234 from your CSS */
-    /* Button styling - adjust width/margins if needed */
-    .buy-btn {
-      width: 80%;
-      margin: 0 auto;
-    }
-
-    /* Ensure images fit well - use height from all.css or define here */
-    .product img.card-img-top {
-      /* height: 200px; /* Example height from all.css */
-      /* width: 100%; */
-      object-fit: contain;
-      /* Or cover */
-      padding-top: 10px;
-      /* Add some padding above image */
-    }
-
-    /* Ensure footer text is visible if default link color is dark */
-    .footer a {
-      color: #fff;
-    }
-
-    .footer a:hover {
-      color: #FF9149;
-    }
-  </style>
 </head>
 
 <body>
 
-    <!-- navbar section -->
+    <-- navbar section -->
     <!-- navbar section -->
 <!-- ============================ -->
 <!--   START: Combined Navbar     -->
