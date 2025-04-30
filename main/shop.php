@@ -1,3 +1,37 @@
+<?php
+session_start(); 
+require_once __DIR__ . '/../admin/config/db.php';
+
+
+// Display feedback messages
+if (isset($_SESSION['success_message'])) {
+    echo '<div class="alert alert-success alert-dismissible fade show container mt-3" role="alert">';
+    echo htmlspecialchars($_SESSION['success_message']);
+    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    echo '</div>';
+    unset($_SESSION['success_message']); // Clear message after displaying
+}
+if (isset($_SESSION['error_message'])) {
+    echo '<div class="alert alert-danger alert-dismissible fade show container mt-3" role="alert">';
+    echo htmlspecialchars($_SESSION['error_message']);
+    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    echo '</div>';
+    unset($_SESSION['error_message']); // Clear message after displaying
+}
+if (isset($_SESSION['info_message'])) {
+    echo '<div class="alert alert-info alert-dismissible fade show container mt-3" role="alert">';
+    echo htmlspecialchars($_SESSION['info_message']);
+    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    echo '</div>';
+    unset($_SESSION['info_message']); // Clear message after displaying
+}
+?>
+
+<!-- Rest of the HTML for cart.php or shop.php -->
+
+
+
+
 <!doctype html>
 <html lang="en">
 
@@ -27,7 +61,6 @@
 
 <body>
 
-    <-- navbar section -->
     <!-- navbar section -->
 <!-- ============================ -->
 <!--   START: Combined Navbar     -->

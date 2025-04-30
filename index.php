@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/admin/config/db.php';
 session_start();
+require_once __DIR__ . '/admin/config/db.php';
 ?>
 <!doctype html>
 <html lang="en">

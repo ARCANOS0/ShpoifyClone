@@ -4,7 +4,7 @@ const form = document.getElementById('form');
 const usernameIN = document.getElementById('username-input');
 const emailIN = document.getElementById('email-input');
 const passwordIn = document.getElementById('password');
-const repeatPass = document.getElementById('repeat-pass');
+const repeatPass = document.getElementById('confirm-password');
 const errorMessage = document.getElementById('error-message');
 
 form.addEventListener('submit', (e) => {

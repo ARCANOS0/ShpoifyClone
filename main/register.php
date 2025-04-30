@@ -1,6 +1,85 @@
 <?php
 require_once __DIR__ . '/../admin/config/db.php';
 session_start();
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action']) && $_POST['action'] === 'register') {
+        // Registration logic
+        $name = trim($_POST['name']);
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
+        $confirmPassword = trim($_POST['confirm-password']);
+
+        // Validate input
+        if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
+            $_SESSION['error'] = 'All fields are required.';
+            header('Location: register.php');
+            exit();
+        }
+
+        if ($password !== $confirmPassword) {
+            $_SESSION['error'] = 'Passwords do not match.';
+            header('Location: register.php');
+            exit();
+        }
+
+        // Check if email already exists
+        $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['error'] = 'Email is already registered.';
+            header('Location: register.php');
+            exit();
+        }
+
+        // Hash the password
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+        // Insert user into the database
+        $stmt = $pdo->prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)');
+        if ($stmt->execute([$name, $email, $hashedPassword])) {
+            $_SESSION['success'] = 'Registration successful. Please log in.';
+            header('Location: ../index.php'); // Redirect to the home page
+            exit();
+        } else {
+            $_SESSION['error'] = 'An error occurred. Please try again.';
+            error_log('Database error: ' . implode(' | ', $stmt->errorInfo())); // Log SQL errors
+            header('Location: register.php');
+            exit();
+        }
+    } elseif (isset($_POST['action']) && $_POST['action'] === 'login') {
+        // Login logic
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
+
+        // Validate input
+        if (empty($email) || empty($password)) {
+            $_SESSION['error'] = 'All fields are required.';
+            header('Location: login.php');
+            exit();
+        }
+
+        // Check if user exists
+        $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['password'])) {
+            // Password is correct, start session
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['name'];
+            header('Location: ../main/shop.php');
+            exit();
+        } else {
+            $_SESSION['error'] = 'Invalid email or password.';
+            header('Location: login.php');
+            exit();
+        }
+    }
+}
+
+
 ?>
 
 
@@ -73,13 +152,19 @@ session_start();
   <div class="wrapper">
     <h1>SignUp</h1>
     <p id="error-message"></p>
-    <form id="form" action="">
+
+            <!-- Corrected Form -->
+            <form id="form" action="register.php" method="POST"> <!-- Action points to self, method is POST -->
+
+                <!-- **** ADD THIS HIDDEN INPUT **** -->
+                <input type="hidden" name="action" value="register">
+
       
       <div class="incorrect">
         <label for="username-input">
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z"/></svg>
         </label>
-      <input type="text" name="username" id="username-input" placeholder="Username">
+      <input type="text" name="name" id="username-input" placeholder="Username">
     </div>
     
     <div>
@@ -100,7 +185,7 @@ session_start();
       <label for="repeat-pass">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z"/></svg>
       </label>
-      <input type="password" name="repeat-pass" id="repeat-pass" placeholder="Repeat Password">
+      <input type="password" name="confirm-password" id="confirm-password" placeholder="Repeat Password">
     </div>
 
     <div>
