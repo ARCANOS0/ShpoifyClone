@@ -151,12 +151,12 @@ try {
     <!-- the brands section -->
     <section id="brand" class="container">
         <div class="row">
-            <img src="pic/brand/brand1.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
-            <img src="pic/brand/brand2.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
-            <img src="pic/brand/brand3.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
-            <img src="pic/brand/brand4.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
-            <img src="pic/brand/brand5.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
-            <img src="pic/brand/brand6.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
+            <img src="pic/1.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
+            <img src="pic/2.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
+            <img src="pic/3.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
+            <img src="pic/4.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
+            <img src="pic/5.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
+            <img src="pic/6.png" alt="" class="img-fluid col-lg-2 col-md-4 col-6">
         </div>
     </section>
 
