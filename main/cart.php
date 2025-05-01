@@ -8,6 +8,7 @@ $subtotal = 0;
 $shipping = 7.01; // Fixed shipping
 
 if (!empty($cart)) {
+
     $placeholders = implode(',', array_fill(0, count($cart), '?'));
     $product_ids = array_keys($cart);
 
