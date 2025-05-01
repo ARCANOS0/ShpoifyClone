@@ -178,7 +178,7 @@ session_start();
     <!-- Row 1 -->
     <div class="row d-flex flex-wrap align-items-stretch">
       <div class="product text-center col-lg-4 col-md-4 col-12">
-        <img src="/Shopify/img/products/pOne.png" alt="Cooking Pan 1" class="img-fluid mb-3">
+        <img src="img/products/pOne.png" alt="Cooking Pan 1" class="img-fluid mb-3">
         <div class="star">
           <i class="fa-solid fa-star"></i>
           <i class="fa-solid fa-star"></i>
@@ -191,7 +191,7 @@ session_start();
         <button class="btn btn-primary buy-btn">Buy Now</button>
       </div>
       <div class="product text-center col-lg-4 col-md-4 col-12">
-        <img src="/Shopify/img/products/pTwo.png" alt="Cooking Pan 2" class="img-fluid mb-3">
+        <img src="img/products/pTwo.png" alt="Cooking Pan 2" class="img-fluid mb-3">
         <div class="star">
           <i class="fa-solid fa-star"></i>
           <i class="fa-solid fa-star"></i>
@@ -204,7 +204,7 @@ session_start();
         <button class="btn btn-primary buy-btn">Buy Now</button>
       </div>
       <div class="product text-center col-lg-4 col-md-4 col-12">
-        <img src="/Shopify/img/products/pThree.png" alt="Cooking Pan 3" class="img-fluid mb-3">
+        <img src="img/products/pThree.png" alt="Cooking Pan 3" class="img-fluid mb-3">
         <div class="star">
           <i class="fa-solid fa-star"></i>
           <i class="fa-solid fa-star"></i>
@@ -221,7 +221,7 @@ session_start();
     <!-- second section of products -->
     <div class="row d-flex flex-wrap align-items-stretch mt-4">
       <div class="product text-center col-lg-4 col-md-4 col-12">
-        <img src="/Shopify/img/products/pFive.png" alt="Cooking Pan 4" class="img-fluid mb-3">
+        <img src="img/products/pFive.png" alt="Cooking Pan 4" class="img-fluid mb-3">
         <div class="star">
           <i class="fa-solid fa-star"></i>
           <i class="fa-solid fa-star"></i>
@@ -234,7 +234,7 @@ session_start();
         <button class="btn btn-primary buy-btn">Buy Now</button>
       </div>
       <div class="product text-center col-lg-4 col-md-4 col-12">
-        <img src="/Shopify/img/products/pSix.png" alt="Cooking Pan 5" class="img-fluid mb-3">
+        <img src="img/products/pSix.png" alt="Cooking Pan 5" class="img-fluid mb-3">
         <div class="star">
           <i class="fa-solid fa-star"></i>
           <i class="fa-solid fa-star"></i>
@@ -245,7 +245,7 @@ session_start();
         <button class="btn btn-primary buy-btn">Buy Now</button>
       </div>
       <div class="product text-center col-lg-4 col-md-4 col-12">
-        <img src="/Shopify/img/products/pSeven.png" alt="Cooking Pan 6" class="img-fluid mb-3">
+        <img src="img/products/pSeven.png" alt="Cooking Pan 6" class="img-fluid mb-3">
         <div class="star">
           <i class="fa-solid fa-star"></i>
           <i class="fa-solid fa-star"></i>
@@ -263,7 +263,7 @@ session_start();
     <!-- third section of products -->
     <div class="row d-flex flex-wrap align-items-stretch mt-4">
       <div class="product text-center col-lg-4 col-md-4 col-12">
-        <img src="/Shopify/img/products/pTen.png" alt="Cooking Pan 4" class="img-fluid mb-3">
+        <img src="img/products/pTen.png" alt="Cooking Pan 4" class="img-fluid mb-3">
         <div class="star">
           <i class="fa-solid fa-star"></i>
           <i class="fa-solid fa-star"></i>
@@ -276,7 +276,7 @@ session_start();
         <button class="btn btn-primary buy-btn">Buy Now</button>
       </div>
       <div class="product text-center col-lg-4 col-md-4 col-12">
-        <img src="/Shopify/img/products/pNine.png" alt="Cooking Pan 5" class="img-fluid mb-3">
+        <img src="img/products/pNine.png" alt="Cooking Pan 5" class="img-fluid mb-3">
         <div class="star">
           <i class="fa-solid fa-star"></i>
           <i class="fa-solid fa-star"></i>
@@ -288,7 +288,7 @@ session_start();
         <button class="btn btn-primary buy-btn">Buy Now</button>
       </div>
       <div class="product text-center col-lg-4 col-md-4 col-12">
-        <img src="/Shopify/img/products/pEight.png" alt="Cooking Pan 6" class="img-fluid mb-3">
+        <img src="img/products/pEight.png" alt="Cooking Pan 6" class="img-fluid mb-3">
         <div class="star">
           <i class="fa-solid fa-star"></i>
           <i class="fa-solid fa-star"></i>
