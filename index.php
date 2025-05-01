@@ -1,6 +1,39 @@
 <?php
 session_start();
 require_once __DIR__ . '/admin/config/db.php';
+require_once __DIR__ . '/index_product_card.php';
+
+// Fetch categories with their products
+try {
+    $categories = [];
+    
+    // Get all categories
+    $stmt = $pdo->query("
+        SELECT c.id, c.name, COUNT(p.id) as product_count 
+        FROM categories c
+        LEFT JOIN products p ON c.id = p.category_id
+        GROUP BY c.id
+        ORDER BY product_count DESC
+    ");
+    
+    while ($category = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // Get products for each category
+        $productStmt = $pdo->prepare("
+            SELECT p.*, c.name as category_name 
+            FROM products p
+            JOIN categories c ON p.category_id = c.id
+            WHERE c.id = ?
+            LIMIT 4
+        ");
+        $productStmt->execute([$category['id']]);
+        $category['products'] = $productStmt->fetchAll(PDO::FETCH_ASSOC);
+        $categories[] = $category;
+    }
+} catch (PDOException $e) {
+    error_log("Shop Page Error: " . $e->getMessage());
+    $errorMessage = "Could not load products at this time.";
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -89,7 +122,7 @@ require_once __DIR__ . '/admin/config/db.php';
                             <li><a class="dropdown-item" href="main/logout.php">
                                 <i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>
-                    <?php else: ?>
+                    <?php else: ?>  
                         <div class="d-flex gap-2">
                             <a href="main/login.php" class="btn btn-outline-light">Login</a>
                             <a href="main/register.php" class="btn btn-primary">Register</a>
@@ -175,137 +208,6 @@ require_once __DIR__ . '/admin/config/db.php';
 
 
         <!-- Products section -->
-
-        <!-- Row 1 -->
-        <div class="row d-flex flex-wrap align-items-stretch">
-            <div class="product text-center col-lg-4 col-md-4 col-12">
-                <img src="pic/home_page_pictures/home1.jpg" alt="Cooking Pan 1" class="img-fluid mb-3">
-                <div class="star">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star-half-stroke"></i>
-                </div>
-                <h5 class="p-name">Ripped T-Shirt</h5>
-                <h4 class="p-price">$22.99</h4>
-                <button class="btn btn-primary buy-btn">Buy Now</button>
-            </div>
-            <div class="product text-center col-lg-4 col-md-4 col-12">
-                <img src="pic/home_page_pictures/home2.jpg" alt="Cooking Pan 2" class="img-fluid mb-3">
-                <div class="star">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star-half-stroke"></i>
-                </div>
-                <h5 class="p-name">Navy Casual Men Shoes</h5>
-                <h4 class="p-price">$45.99</h4>
-                <button class="btn btn-primary buy-btn">Buy Now</button>
-            </div>
-            <div class="product text-center col-lg-4 col-md-4 col-12">
-                <img src="pic/home_page_pictures/home3.jpg" alt="Cooking Pan 3" class="img-fluid mb-3">
-                <div class="star">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                </div>
-                <h5 class="p-name">White Sneakers</h5>
-                <h4 class="p-price">$62.99</h4>
-                <button class="btn btn-primary buy-btn">Buy Now</button>
-            </div>
-        </div>
-
-        <!-- Row 2  -->
-        <!-- second section of products -->
-        <div class="row d-flex flex-wrap align-items-stretch mt-4">
-            <div class="product text-center col-lg-4 col-md-4 col-12">
-                <img src="pic/home_page_pictures/home4.jpg" alt="Cooking Pan 4" class="img-fluid mb-3">
-                <div class="star">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                </div>
-                <h5 class="p-name">Perfume Lattafa</h5>
-                <h4 class="p-price">$132.99</h4>
-                <button class="btn btn-primary buy-btn">Buy Now</button>
-            </div>
-            <div class="product text-center col-lg-4 col-md-4 col-12">
-                <img src="pic/home_page_pictures/home5.jpg" alt="Cooking Pan 5" class="img-fluid mb-3">
-                <div class="star">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                </div>
-                <h5 class="p-name">Redmi 13</h5>
-                <h4 class="p-price">$199.99</h4>
-                <button class="btn btn-primary buy-btn">Buy Now</button>
-            </div>
-            <div class="product text-center col-lg-4 col-md-4 col-12">
-                <img src="pic/home_page_pictures/home6.jpg" alt="Cooking Pan 6" class="img-fluid mb-3">
-                <div class="star">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star-half-stroke"></i>
-                </div>
-                <h5 class="p-name">Sandwich Grill</h5>
-                <h4 class="p-price">$222.99</h4>
-                <button class="btn btn-primary buy-btn">Buy Now</button>
-            </div>
-        </div>
-
-        <!-- third row -->
-        <!-- third section of products -->
-        <div class="row d-flex flex-wrap align-items-stretch mt-4">
-            <div class="product text-center col-lg-4 col-md-4 col-12">
-                <img src="pic/home_page_pictures/home7.jpg" alt="Cooking Pan 4" class="img-fluid mb-3">
-                <div class="star">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star-half-stroke"></i>
-                </div>
-                <h5 class="p-name">Waffle Maker</h5>
-                <h4 class="p-price">$100.99</h4>
-                <button class="btn btn-primary buy-btn">Buy Now</button>
-            </div>
-            <div class="product text-center col-lg-4 col-md-4 col-12">
-                <img src="/Shopify/img/products/pNine.png" alt="Cooking Pan 5" class="img-fluid mb-3">
-                <div class="star">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                </div>
-                <h5 class="p-name">Knife set</h5>
-                <h4 class="p-price">$47.23</h4>
-                <button class="btn btn-primary buy-btn">Buy Now</button>
-            </div>
-            <div class="product text-center col-lg-4 col-md-4 col-12">
-                <img src="pic/hotPad.png" alt="Cooking Pan 6" class="img-fluid mb-3">
-                <div class="star">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-
-                </div>
-                <h5 class="p-name">Hot pads</h5>
-                <h4 class="p-price">$11.96</h4>
-                <button class="banner btn btn btn-primary buy-btn"><a href="">Buy Now</a></button>
-            </div>
-        </div>
-
-    </section>
-
     <!-- banner section -->
     <section id="banner">
         <div class="banner-img">
@@ -315,6 +217,38 @@ require_once __DIR__ . '/admin/config/db.php';
             </div>
         </div>
     </section>
+    <div class="container my-5">
+    <?php if(isset($errorMessage)): ?>
+        <div class="alert alert-danger"><?= $errorMessage ?></div>
+    <?php else: ?>
+        <?php foreach ($categories as $category): ?>
+            <div class="text-center mb-4 pt-5">
+                <h1><?= htmlspecialchars($category['name']) ?></h1>
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+                <?php foreach ($category['products'] as $product): ?>
+                    <div class="col">
+                        <div class="card">
+                            <img src="<?= htmlspecialchars($product['thumbnail']) ?>" class="card-img-top" alt="<?= htmlspecialchars($product['title']) ?>">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($product['title']) ?></h5>
+                                <p class="card-text">$<?= number_format($product['price'], 2) ?></p>
+                                <!-- Add to Cart Form -->
+                                <form action="main/cart_add.php" method="post">
+                                    <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                                    <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 100px;">
+                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
+
+
 
 
 

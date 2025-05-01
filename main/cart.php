@@ -1,252 +1,213 @@
 <?php
-require_once __DIR__ . '/../admin/config/db.php';
 session_start();
+require_once __DIR__ . '/../admin/config/db.php';
 
-if (isset($_SESSION['success_message'])) {
-    echo '<div class="alert alert-success alert-dismissible fade show container mt-3" role="alert">';
-    echo htmlspecialchars($_SESSION['success_message']);
-    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-    echo '</div>';
-    unset($_SESSION['success_message']); 
-}
-if (isset($_SESSION['error_message'])) {
-    echo '<div class="alert alert-danger alert-dismissible fade show container mt-3" role="alert">';
-    echo htmlspecialchars($_SESSION['error_message']);
-    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-    echo '</div>';
-    unset($_SESSION['error_message']); 
-}
-if (isset($_SESSION['info_message'])) {
-    echo '<div class="alert alert-info alert-dismissible fade show container mt-3" role="alert">';
-    echo htmlspecialchars($_SESSION['info_message']);
-    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-    echo '</div>';
-    unset($_SESSION['info_message']); 
+$cart = $_SESSION['cart'] ?? [];
+$cart_items = [];
+$subtotal = 0;
+$shipping = 7.01; // Fixed shipping
+
+if (!empty($cart)) {
+    $placeholders = implode(',', array_fill(0, count($cart), '?'));
+    $product_ids = array_keys($cart);
+
+    $stmt = $pdo->prepare("SELECT id, title, price, thumbnail AS image FROM products WHERE id IN ($placeholders)");
+    $stmt->execute($product_ids);
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($products as $product) {
+        $id = $product['id'];
+        $quantity = $cart[$id]['quantity'];
+        $line_total = $product['price'] * $quantity;
+
+        $cart_items[] = [
+            'id' => $id,
+            'title' => $product['title'],
+            'price' => $product['price'],
+            'image' => $product['image'],
+            'quantity' => $quantity,
+            'line_total' => $line_total,
+        ];
+
+        $subtotal += $line_total;
+    }
 }
 ?>
-
-
-
 
 <!doctype html>
 <html lang="en">
 
 <head>
-    <title>Shopify - Cart</title>
-    <!-- Required meta tags -->
+    <title>Cart - Shopify</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-
-    <!-- Bootstrap CSS v5.3.2 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-
-    <!-- Font Awesome -->
-    <!-- Make sure you have a valid Font Awesome kit/setup if using v6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Boxicons (If still needed) -->
-    <!-- <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> -->
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="shortcut icon" href="../pic/logo (2).png" type="image/x-icon">
-
-    <!-- Your Custom CSS Files -->
-    <!-- Load general styles first -->
     <link rel="stylesheet" href="../all.css">
-     <!-- Load specific cart styles AFTER Bootstrap and general styles -->
-    <link rel="stylesheet" href="../snippets/cart.css">
-
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-light py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="../index.php">
+                <img style="height: 50px; margin-right: 10px;" src="../pic/logo (2).png" alt="Logo">
+                <h3 style="color: whitesmoke;" class="mb-0">Shopify</h3>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span><i id="bar" class="fa-solid fa-bars"></i></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="shop.php">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.php">Contact Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.php">Cart <i class="fa-solid fa-cart-shopping"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="Search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </a>
+                    </li>
 
-
-    <!-- navbar section -->
-    <!-- navbar section -->
-<!-- ============================ -->
-<!--   START: Combined Navbar     -->
-<!-- ============================ -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary navbar-light py-3">
-    <!-- Use container for better centering/margins -->
-    <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="index.php"> <!-- Make logo/name a link -->
-            <img style="height: 50px; margin-right: 10px;" src="../pic/logo (2).png" alt="Logo">
-             <!-- Removed margin from h3 for better alignment -->
-            <h3 style="color: whitesmoke;" class="mb-0">Shopify</h3>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <!-- Ensure Font Awesome is loaded correctly for this icon -->
-            <span><i id="bar" class="fa-solid fa-bars"></i></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-             <!-- Use ms-auto for Bootstrap 5 margin, align-items-center for vertical alignment -->
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-                <li class="nav-item">
-                    <!-- Assuming index.php is in the root -->
-                    <a class="nav-link active" aria-current="page" href="../index.php">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="shop.php">Shop</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.php">Contact Us</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="cart.php">Cart <i class="fa-solid fa-cart-shopping"></i></a>
-                </li>
-                <!-- Search Icon as Modal Trigger -->
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="Search">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </a>
-                </li>
-                <!-- Removed the standalone icon from here -->
-            </ul>
-        </div>
-    </div>
-</nav>
-<!-- ============================ -->
-<!--    END: Combined Navbar      -->
-<!-- ============================ -->
-
-
-<!-- ============================ -->
-<!--   Search Modal HTML Block    -->
-<!-- (Place this code elsewhere in your HTML body, e.g., before the closing </body> tag) -->
-<!-- ============================ -->
-<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="searchModalLabel">Search Products</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Search Form pointing to search_results.php -->
-        <!-- Ensure the 'action' path is correct relative to the page the navbar is on -->
-        <form action="search_results.php" method="GET" role="search">
-            <div class="input-group mb-3">
-                <input type="search" class="form-control" placeholder="Enter product name, keyword..." aria-label="Search query" name="query" required>
-                <button class="btn btn-outline-primary" type="submit">
-                    <i class="fa-solid fa-magnifying-glass"></i> Search
-                </button>
+                    <!-- Profile Section -->
+                    <li class="nav-item dropdown">
+                        <?php if (isset($_SESSION['user_id'])): ?>
+                            <?php
+                            // Get user data
+                            $stmt = $pdo->prepare("SELECT name, profile_picture FROM users WHERE id = ?");
+                            $stmt->execute([$_SESSION['user_id']]);
+                            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+                            ?>
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="uploads/profiles/person.jpg" <?= htmlspecialchars($user['profile_picture'] ?? 'person.jpg') ?>"
+                                    class="profile-pic rounded-circle"
+                                    style="width: 35px; height: 35px; object-fit: cover;"
+                                    alt="">
+                                <span class="ms-2 d-none d-lg-inline" style="color: white;">
+                                    <?= htmlspecialchars($user['name']) ?>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="main/profile.php">
+                                        <i class="fas fa-user me-2"></i>Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="main/logout.php">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        <?php else: ?>
+                            <div class="d-flex gap-2">
+                                <a href="main/login.php" class="btn btn-outline-light">Login</a>
+                                <a href="main/register.php" class="btn btn-primary">Register</a>
+                            </div>
+                        <?php endif; ?>
+                    </li>
+                </ul>
             </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- ============================ -->
-<!-- END: Search Modal HTML Block -->
-<!-- ============================ -->
-    <!-- php search snippet -->
-    <!-- Cart Section Title -->
-    <section id="cart-title" class="pt-5 mt-5 container">
-        <h2 class="fw-bold">Shopping Cart</h2>
-        <hr>
-    </section>
+        </div>
+    </nav>
 
     <!-- Cart Table Section -->
     <section id="cart" class="cart-container container my-5">
-        <!-- Responsive wrapper for the table -->
         <div class="table-responsive">
             <table class="table table-bordered text-center align-middle">
-                <!-- Table Head uses your custom CSS for background -->
-                <thead class="table-light"> <!-- Removed table-light if using custom background -->
-                    <tr>
-                        <td>Remove</td>
-                        <td>Image</td>
-                        <td>Product</td>
-                        <td>Price</td>
-                        <td>Quantity</td>
-                        <td>Total</td>
-                    </tr>
+                <thead class="table-light">
+                    <!-- ... [keep table headers] ... -->
                 </thead>
 
                 <tbody>
-                    <!-- EXAMPLE CART ROW (Generate this part with PHP) -->
-                    <tr>
-                        <td>
-                            <!-- Styled remove link as a button -->
-                            <a href="#" class="btn btn-outline-danger btn-sm">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <!-- img-fluid makes image responsive -->
-                            <img class="img-fluid" src="../pic/kitchen/cup3.png" alt="Cup Demo">
-                        </td>
-                        <td>
-                            <!-- Use h6 or p for product name -->
-                            <h6 class="mb-0">Cup Demo</h6>
-                        </td>
-                        <td>
-                             <!-- Product Price -->
-                            <p class="mb-0">$22.99</p>
-                        </td>
-                        <td>
-                            <!-- Quantity Input -->
-                            <input class="form-control form-control-sm w-50 mx-auto" value="1" min="1" type="number">
-                        </td>
-                        <td>
-                             <!-- Subtotal for this item -->
-                            <p class="mb-0 fw-bold">$22.99</p>
-                        </td>
-                    </tr>
-                    <!-- Add more <tr> elements here for other cart items -->
+    <?php if (empty($cart_items)): ?>
+        <tr>
+            <td colspan="6" class="text-center py-4">Your cart is currently empty.</td>
+        </tr>
+    <?php else: ?>
+        <?php foreach ($cart_items as $item):
+            $line_total = $item['price'] * $item['quantity'];
+            $subtotal += $line_total;
+        ?>
+            <tr>
+                <!-- Delete button -->
+                <td>
+                    <a href="cart_remove.php?id=<?= htmlspecialchars($item['id']) ?>" class="btn btn-outline-danger btn-sm">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
 
-                    <!-- Example Row 2 -->
-                     <tr>
-                        <td><a href="#" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></a></td>
-                        <td><img class="img-fluid" src="../pic/path/to/another-product.jpg" alt="Another Product"></td>
-                        <td><h6 class="mb-0">Another Item</h6></td>
-                        <td><p class="mb-0">$50.00</p></td>
-                        <td><input class="form-control form-control-sm w-50 mx-auto" value="2" min="1" type="number"></td>
-                        <td><p class="mb-0 fw-bold">$100.00</p></td>
-                    </tr>
+                <!-- Product Image -->
+                <td>
+                    <img class="img-fluid"
+                         src="<?= htmlspecialchars($item['image']) ?>"
+                         alt="<?= htmlspecialchars($item['title']) ?>"
+                         style="max-width: 80px;">
+                </td>
 
-                     <!-- Row shown when cart is empty -->
-                     <?php /*
-                     if (empty($cart_items)) { // Example PHP check
-                         echo '<tr><td colspan="6" class="text-center py-4">Your cart is currently empty.</td></tr>';
-                     }
-                     */ ?>
-                </tbody>
+                <!-- Product Title -->
+                <td>
+                    <h6 class="mb-0"><?= htmlspecialchars($item['title']) ?></h6>
+                </td>
+
+                <!-- Product Price -->
+                <td>
+                    <p class="mb-0">$<?= number_format($item['price'], 2) ?></p>
+                </td>
+
+                <!-- Quantity Input -->
+                <td>
+                    <form action="cart_update.php" method="POST">
+                        <input type="hidden" name="product_id" value="<?= htmlspecialchars($item['id']) ?>">
+                        <input class="form-control form-control-sm w-50 mx-auto"
+                               name="quantity"
+                               value="<?= htmlspecialchars($item['quantity']) ?>"
+                               min="1"
+                               type="number">
+                    </form>
+                </td>
+
+                <!-- Line Total -->
+                <td>
+                    <p class="mb-0 fw-bold">$<?= number_format($line_total, 2) ?></p>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</tbody>
             </table>
         </div>
     </section>
 
     <!-- Cart Totals Section -->
     <section id="cart-bottom" class="container mb-5">
-        <div class="row justify-content-end"> <!-- Align content to the right -->
-
-            <!-- Totals Column -->
-             <!-- Adjust col size for different breakpoints as needed -->
+        <div class="row justify-content-end">
             <div class="col-lg-6 col-md-7 col-12">
-                <div class="card border-0 shadow-sm"> <!-- Use a card for styling -->
+                <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title mb-4">Cart Totals</h5>
                         <div class="d-flex justify-content-between mb-3">
                             <span>Subtotal</span>
-                            <!-- Calculate Subtotal with PHP -->
-                            <span class="fw-bold">$122.99</span>
+                            <span class="fw-bold">$<?= number_format($subtotal, 2) ?></span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <span>Shipping</span>
-                             <!-- Replace with dynamic shipping cost or options -->
-                            <span class="fw-bold">$7.01</span>
+                            <span class="fw-bold">$<?= number_format($shipping, 2) ?></span>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between fw-bold mb-4">
                             <span>Grand Total</span>
-                            <!-- Calculate Grand Total with PHP -->
-                            <span>$130.00</span>
-                        </div>
-                        <div class="d-grid"> <!-- Makes button full width of its container -->
-                             <a href="checkout.php" class="btn btn-primary">Proceed to Checkout</a>
+                            <span>$<?= number_format($subtotal + $shipping, 2) ?></span>
                         </div>
                     </div>
                 </div>
@@ -254,74 +215,7 @@ if (isset($_SESSION['info_message'])) {
         </div>
     </section>
 
-
-  <!-- footer section -->
-  <footer class="footer mt-5 py-3">
-    <div class="row container mx-auto pt-5">
-
-      <div class="containerF">
-        <div class="row">
-          <div class="footer-col">
-            <h4>Team</h4>
-            <ul>
-              <li><a href="about.php">About Us</a></li>
-              <li><a href="#">Services</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-
-            </ul>
-          </div>
-
-          <div class="footer-col">
-            <h4>Get Help</h4>
-            <ul>
-              <li><a href="FAQ.php">FAQ</a></li>
-              <li><a href="#">Returning</a></li>
-              <li><a href="#">Shipping</a></li>
-              <li><a href="#">Payment Methods</a></li>
-
-            </ul>
-          </div>
-
-          <div class="footer-col">
-            <h4>Categories</h4>
-            <ul>
-              <li><a href="../index.php">Best Seller</a></li>
-              <li><a href="kitchen.php">Kitchen</a></li>
-              <li><a href="cloth.php">Clothing</a></li>
-              <li><a href="shoes.php">Shoes</a></li>
-              <li><a href="electrical.php">Electrical Appliance </a></li>
-
-
-
-            </ul>
-          </div>
-
-          <div class="footer-col">
-            <h4>Follow Us</h4>
-            <div class="socialLinks">
-              <a href="#"> <i class="fab fa-facebook-f"></i></a>
-              <a href="#"> <i class="fab fa-instagram"></i></a>
-              <a href="#"> <i class="fab fa-linkedin-in"></i></a>
-
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </footer>
-
-    <!-- Bootstrap JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"></script>
-
-     <!-- Boxicons JS (If still needed) -->
-     <!-- <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script> -->
+    <!-- ... [keep existing footer and scripts] ... -->
 </body>
 
 </html>
