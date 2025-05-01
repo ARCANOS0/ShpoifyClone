@@ -23,7 +23,7 @@ function getCurrentUser() {
     global $pdo; // Need to access the global $pdo from db.php
     if (isLoggedIn()) {
         // Pass $pdo to getUserData
-        return getUserData($_SESSION['user_id'], $pdo);
+        return getUserData($_SESSION['id'], $pdo);
     }
     return null;
 }
@@ -43,7 +43,7 @@ function updateUserData($userId, $data, PDO $pdo) {
     
     $stmt = $pdo->prepare($sql);
     return $stmt->execute([
-        ':username' => $data['username'],
+        ':username' => $data['name'],
         ':email' => $data['email'],
         ':phone' => $data['phone'],
         ':address' => $data['address'],

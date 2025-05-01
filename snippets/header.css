@@ -1,0 +1,87 @@
+/* User Profile in Header */
+.user-profile {
+    margin-left: auto;
+    position: relative;
+}
+
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 25px;
+    transition: background 0.3s ease;
+}
+
+.profile-trigger:hover {
+    background: rgba(255,145,73,0.1);
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #FF9149;
+}
+
+.profile-name {
+    font-weight: 500;
+    color: #2A3335;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 10px 0;
+    min-width: 200px;
+    display: none;
+    z-index: 1000;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    color: #2A3335;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background: #f8f9fa;
+    color: #FF9149;
+}
+
+.auth-links {
+    display: flex;
+    gap: 15px;
+}
+
+.login-btn,
+.register-btn {
+    padding: 8px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-btn {
+    color: #2A3335;
+    border: 2px solid #2A3335;
+}
+
+.register-btn {
+    background: #FF9149;
+    color: white;
+}

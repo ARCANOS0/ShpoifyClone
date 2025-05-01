@@ -26,8 +26,8 @@ if ($product_id === false || $product_id <= 0) {
     if (!$product) {
       $errorMessage = "Product not found or is unavailable.";
     } else {
-      if (!empty($product['category_name'])) {
-        $categoryName = $product['category_name'];
+      if (!empty($product['description'])) {
+        $categoryName = $product['description'];
       }
     }
   } catch (PDOException $e) {
@@ -171,7 +171,8 @@ if ($product_id === false || $product_id <= 0) {
   <div class="row mt-5">
     <div class="col-lg-5 col-md-12 col-12">
       <?php if ($product): ?>
-        <img class="img-fluid w-100" src="../pic/<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+        <img class="img-fluid w-100" src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+
       <?php else: ?>
         <img class="img-fluid w-100" src="../pic/default.png" alt="No product found">
       <?php endif; ?>
@@ -185,7 +186,7 @@ if ($product_id === false || $product_id <= 0) {
 
         <!-- Add to Cart Form -->
         <form action="cart_add.php" method="POST" class="mt-4">
-          <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
+          <input type="hidden" name="id" value="<?php echo htmlspecialchars($product['id']); ?>">
 
           <div class="row g-3 align-items-center">
             <div class="col-auto">

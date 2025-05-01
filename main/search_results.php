@@ -82,97 +82,87 @@ if (isset($_GET['query'])) {
 </head>
 
 <body>
-    <!-- Include Navbar -->
-    <?php
-    // Adjust the path to your actual navbar file relative to search_results.php
-    // If search_results.php is in the same directory as cart.php, this might be:
-    // include('navbar.php'); // Or '../navbar.php' or 'snippets/navbar.php' etc.
-    // For now, I'll copy the navbar HTML here for a self-contained example,
-    // but using include() is better practice.
-    ?>
-    <!-- START: Copied Navbar (Replace with include('path/to/navbar.php'); later) -->
-     <!-- navbar section -->
-    <!-- navbar section -->
-<!-- ============================ -->
-<!--   START: Combined Navbar     -->
-<!-- ============================ -->
-<nav class="navbar navbar-expand-lg bg-body-tertiary navbar-light py-3">
-    <!-- Use container for better centering/margins -->
-    <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="index.php"> <!-- Make logo/name a link -->
-            <img style="height: 50px; margin-right: 10px;" src="../pic/logo (2).png" alt="Logo">
-             <!-- Removed margin from h3 for better alignment -->
-            <h3 style="color: whitesmoke;" class="mb-0">Shopify</h3>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <!-- Ensure Font Awesome is loaded correctly for this icon -->
-            <span><i id="bar" class="fa-solid fa-bars"></i></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-             <!-- Use ms-auto for Bootstrap 5 margin, align-items-center for vertical alignment -->
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-                <li class="nav-item">
-                    <!-- Assuming index.php is in the root -->
-                    <a class="nav-link active" aria-current="page" href="../index.php">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="shop.php">Shop</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.php">Contact Us</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="cart.php">Cart <i class="fa-solid fa-cart-shopping"></i></a>
-                </li>
-                <!-- Search Icon as Modal Trigger -->
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="Search">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </a>
-                </li>
-                <!-- Removed the standalone icon from here -->
-            </ul>
+ 
+    <!-- ============================ -->
+    <!--   START: Combined Navbar     -->
+    <!-- ============================ -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary navbar-light py-3">
+        <!-- Use container for better centering/margins -->
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="../index.php"> <!-- Make logo/name a link -->
+                <img style="height: 50px; margin-right: 10px;" src="../pic/logo (2).png" alt="Logo">
+                <!-- Removed margin from h3 for better alignment -->
+                <h3 style="color: whitesmoke;" class="mb-0">Shopify</h3>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- Ensure Font Awesome is loaded correctly for this icon -->
+                <span><i id="bar" class="fa-solid fa-bars"></i></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Use ms-auto for Bootstrap 5 margin, align-items-center for vertical alignment -->
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item">
+                        <!-- Assuming index.php is in the root -->
+                        <a class="nav-link active" aria-current="page" href="../index.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="shop.php">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.php">Contact Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.php">Cart <i class="fa-solid fa-cart-shopping"></i></a>
+                    </li>
+                    <!-- Search Icon as Modal Trigger -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="Search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </a>
+                    </li>
+                    <!-- Removed the standalone icon from here -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- ============================ -->
+    <!--    END: Combined Navbar      -->
+    <!-- ============================ -->
+
+
+    <!-- ============================ -->
+    <!--   Search Modal HTML Block    -->
+    <!-- (Place this code elsewhere in your HTML body, e.g., before the closing </body> tag) -->
+    <!-- ============================ -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Search Products</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Search Form pointing to search_results.php -->
+                    <!-- Ensure the 'action' path is correct relative to the page the navbar is on -->
+                    <form action="main/search_results.php" method="GET" role="search">
+                        <div class="input-group mb-3">
+                            <input type="search" class="form-control" placeholder="Enter product name, keyword..." aria-label="Search query" name="query" required>
+                            <button class="btn btn-outline-primary" type="submit">
+                                <i class="fa-solid fa-magnifying-glass"></i> Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
-<!-- ============================ -->
-<!--    END: Combined Navbar      -->
-<!-- ============================ -->
-
-
-<!-- ============================ -->
-<!--   Search Modal HTML Block    -->
-<!-- (Place this code elsewhere in your HTML body, e.g., before the closing </body> tag) -->
-<!-- ============================ -->
-<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="searchModalLabel">Search Products</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Search Form pointing to search_results.php -->
-        <!-- Ensure the 'action' path is correct relative to the page the navbar is on -->
-        <form action="main/search_results.php" method="GET" role="search">
-            <div class="input-group mb-3">
-                <input type="search" class="form-control" placeholder="Enter product name, keyword..." aria-label="Search query" name="query" required>
-                <button class="btn btn-outline-primary" type="submit">
-                    <i class="fa-solid fa-magnifying-glass"></i> Search
-                </button>
-            </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- ============================ -->
-<!-- END: Search Modal HTML Block -->
-<!-- ============================ -->
+    <!-- ============================ -->
+    <!-- END: Search Modal HTML Block -->
+    <!-- ============================ -->
     <!-- php search snippet -->
 
     <!-- Search Results Section -->
@@ -196,7 +186,8 @@ if (isset($_GET['query'])) {
                     <div class="col">
                         <div class="card h-100 product shadow-sm border-0">
                             <a href="product_details.php?id=<?php echo htmlspecialchars($product['id']); ?>">
-                                <img src="<?php echo htmlspecialchars($product['image_url']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                                <img src="<?php echo htmlspecialchars($product['image_url']); ?>" alt="Product image">
+                                class="card-img-top" alt="<?php echo htmlspecialchars($product['name']); ?>">
                             </a>
                             <div class="card-body text-center">
                                 <div>

@@ -227,25 +227,6 @@ session_start();
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   <!-- footer section -->
   <footer class="footer mt-5 py-3">
     <div class="row container mx-auto pt-5">
